@@ -1,3 +1,4 @@
+import { io } from 'socket.io-client';
 import Phaser from 'phaser';
 
 const PADDLE_SPEED = 700;
@@ -72,6 +73,7 @@ export class GameScene extends Phaser.Scene {
 		this.rightKey2 = this.input.keyboard.addKey(
 			Phaser.Input.Keyboard.KeyCodes.D
 		);
+		io('localhost:8085');
 	}
 	update(time: number, delta: number): void {
 		const option = true;
