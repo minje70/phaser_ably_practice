@@ -5,5 +5,5 @@ export default function App() {
 	useEffect(() => {
 		new Phaser.Game(config);
 	});
-	return <div>hello</div>;
+	return <div></div>;
 }

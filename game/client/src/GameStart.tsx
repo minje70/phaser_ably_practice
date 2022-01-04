@@ -1,37 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
 import { config } from './script';
-import io, { Socket } from 'socket.io-client';
-
-enum openState {
-	beforeEnter,
-	afterEnter,
-	wating,
-}
 
 export default function GameStart() {
-	const [game, setGame] = useState(openState.beforeEnter);
+	const [isGameStart, setIsGameStart] = useState(false);
 	const [phaser, setPhaser] = useState<Phaser.Game | null>(null);
-	const [socketState, setSocketState] = useState<Socket>(
-		io('http://localhost:8080')
-	);
 	const onClick = () => {
 		// 게임 신청
-		socketState?.emit('startGame', { name: 'mijeong' });
+		// Scene을 만들고 그 안에서 startGame 걸고, matchGame emit을 건다.
+		// 그럼 로딩도 어떻게든 할 수 있을거 같고
+		// socketState?.emit('startGame', { name: 'mijeong' });
+		setIsGameStart(true);
+		setPhaser(new Phaser.Game(config));
 	};
-	useEffect(() => {
-		socketState?.on('matchGame', (payload) => {
-			console.log(payload);
-			setGame(openState.afterEnter);
-			setPhaser(new Phaser.Game(config));
-		});
-		return () => {
-			socketState?.disconnect();
-		};
-	}, []);
 	const onExit = () => {
 		console.log('exit');
-		setGame(openState.beforeEnter);
+		setIsGameStart(false);
 		// 닫자.
 		phaser?.destroy(true);
 		// setGame(openState.beforeEnter);
@@ -42,9 +26,9 @@ export default function GameStart() {
 	};
 	return (
 		<div>
-			{game === openState.afterEnter ? (
+			{isGameStart === true ? (
 				<div></div>
-			) : game === openState.beforeEnter ? (
+			) : isGameStart === false ? (
 				<>
 					<button onClick={onClick}>입장</button>
 				</>
@@ -54,7 +38,7 @@ export default function GameStart() {
 					<button onClick={onCancel}>취소</button>
 				</>
 			)}
-			<button onClick={onExit}>Exit</button>
+			<button onClick={onExit}>게임 나가기</button>
 		</div>
 	);
 }

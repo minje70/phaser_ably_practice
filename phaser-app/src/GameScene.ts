@@ -1,4 +1,3 @@
-import { io } from 'socket.io-client';
 import Phaser from 'phaser';
 
 const PADDLE_SPEED = 700;
@@ -29,14 +28,13 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	create() {
-		const option = true;
 		this.paddle1 = this.physics.add.image(800, 300, 'paddle');
 		this.paddle1.setCollideWorldBounds(true);
-		if (option === true) this.paddle1.setBounce(0.2);
+		this.paddle1.setBounce(0.2);
 
 		this.paddle2 = this.physics.add.image(100, 300, 'paddle2');
 		this.paddle2.setCollideWorldBounds(true);
-		if (option === true) this.paddle2.setBounce(0.2);
+		this.paddle2.setBounce(0.2);
 
 		this.ball = this.physics.add.image(200, 150, 'ball');
 		this.physics.add.collider(this.paddle1, this.ball);
@@ -73,18 +71,15 @@ export class GameScene extends Phaser.Scene {
 		this.rightKey2 = this.input.keyboard.addKey(
 			Phaser.Input.Keyboard.KeyCodes.D
 		);
-		io('localhost:8085');
 	}
 	update(time: number, delta: number): void {
-		const option = true;
-		const vel = 200;
-		if (option && this.paddle1) {
+		if (this.paddle1) {
 			if (this.downKey1?.isDown) this.paddle1.setVelocityY(PADDLE_SPEED);
 			if (this.upKey1?.isDown) this.paddle1.setVelocityY(-PADDLE_SPEED);
 			if (this.leftKey1?.isDown) this.paddle1.setVelocityX(-PADDLE_SPEED);
 			if (this.rightKey1?.isDown) this.paddle1.setVelocityX(PADDLE_SPEED);
 		}
-		if (option && this.paddle2) {
+		if (this.paddle2) {
 			if (this.downKey2?.isDown) this.paddle2.setVelocityY(PADDLE_SPEED);
 			if (this.upKey2?.isDown) this.paddle2.setVelocityY(-PADDLE_SPEED);
 			if (this.leftKey2?.isDown) this.paddle2.setVelocityX(-PADDLE_SPEED);
