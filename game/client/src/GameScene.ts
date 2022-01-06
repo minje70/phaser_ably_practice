@@ -34,7 +34,6 @@ export class GameScene extends Phaser.Scene {
 	// 방향키
 	private upKey1: Phaser.Input.Keyboard.Key | null = null;
 	private downKey1: Phaser.Input.Keyboard.Key | null = null;
-	private escKey1: Phaser.Input.Keyboard.Key | null = null;
 
 	private socket: Socket | null = null;
 	private isStart: boolean = false;
@@ -60,7 +59,6 @@ export class GameScene extends Phaser.Scene {
 		this.socket.emit('startGame');
 
 		this.socket.on('waitingGame', (payload) => {
-			console.log(payload.welcome);
 			this.isLeft = payload.isLeft;
 			this.roomId = payload.roomId;
 		});
@@ -73,7 +71,6 @@ export class GameScene extends Phaser.Scene {
 				this.enemyPaddle?.setPosition(payload.pos.x, payload.pos.y);
 		});
 		this.socket.on('updateBall', (payload: BallInfo) => {
-			console.log(payload);
 			this.ball?.setX(payload.pos.x);
 			this.ball?.setY(payload.pos.y);
 			this.ball?.setVelocityX(payload.velocity.x);
@@ -167,9 +164,6 @@ export class GameScene extends Phaser.Scene {
 		);
 		this.downKey1 = this.input.keyboard.addKey(
 			Phaser.Input.Keyboard.KeyCodes.DOWN
-		);
-		this.escKey1 = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ESC
 		);
 
 		// destroy 이벤트 잡기.
